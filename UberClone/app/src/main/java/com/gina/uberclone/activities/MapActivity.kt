@@ -3,6 +3,7 @@ package com.gina.uberclone.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.location.Geocoder
@@ -14,6 +15,7 @@ import android.os.Bundle
 import android.util.Log
 
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 
@@ -68,6 +70,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, Listener {
     private val driversLocation = ArrayList<DriverLocation>()
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapBinding.inflate(layoutInflater)
@@ -91,6 +94,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, Listener {
         ))
 
         startGooglePlaces()
+        binding.btnRequestTrip.setOnClickListener { gotToTripInfo() }
 
     }
 
@@ -191,6 +195,22 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, Listener {
 
 
         })
+    }
+
+    private fun gotToTripInfo() {
+
+        if(originLatLng != null && destinationLatLng != null) {
+            val i = Intent(this, TripInfoActivity::class.java)
+            i.putExtra("origin", originName)
+            i.putExtra("destination", destinationName)
+            i.putExtra("origin_lat", originLatLng?.latitude)
+            i.putExtra("origin_lng", originLatLng?.longitude)
+            i.putExtra("destination_lat", destinationLatLng?.latitude)
+            i.putExtra("destination_lng", destinationLatLng?.longitude)
+            startActivity(i)
+        } else {
+            Toast.makeText(this, "You must enter the Pickup location and Destination", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun getPositionDriver(id: String): Int {

@@ -3,7 +3,7 @@ package com.gina.uberclone.models
 
 import com.beust.klaxon.*
 
-private val klaxon = Klaxon()
+val klaxon = Klaxon()
 
 data class Client (
     val id: String ? = null,
